@@ -1,0 +1,29 @@
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: gruntwork-io/terragrunt-action@v3
+        with:
+          tg_add_approve: 1
+          tg_command: run --all apply
+          tg_dir: ./environments/${{ inputs.environment }}
+        env:
+          BACKEND_ACCESS_KEY: ${{ secrets.BACKEND_ACCESS_KEY }}
+          BACKEND_SECRET_KEY: ${{ secrets.BACKEND_SECRET_KEY }}
+          BACKEND_BUCKET: ${{ secrets.BACKEND_BUCKET }}
+          BACKEND_REGION: ${{ secrets.BACKEND_REGION }}
+          BACKEND_ENDPOINT: ${{ secrets.BACKEND_ENDPOINT }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
+          TF_VAR_lightsail_public_key: ${{ secrets.LIGHTSAIL_PUBLIC_KEY }}
+          TF_VAR_lightsail_allowed_cidrs: ${{ secrets.LIGHTSAIL_ALLOWED_CIDRS }}
