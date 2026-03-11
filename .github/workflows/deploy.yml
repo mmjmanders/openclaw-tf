@@ -26,5 +26,5 @@ jobs:
     uses: ./.github/workflows/.terragrunt-template.yml
     secrets: inherit
     with:
-      environment: ${{ github.event.inputs.environment }}
+      environment: ${{ inputs.environment }}
       command: apply
