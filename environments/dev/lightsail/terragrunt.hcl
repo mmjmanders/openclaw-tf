@@ -1,3 +1,7 @@
+include "root" {
+  path = find_in_parent_folders("root.hcl")
+}
+
 locals {
   env_vars = yamldecode(file(find_in_parent_folders("env.yaml")))
 }
