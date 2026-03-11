@@ -29,9 +29,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: gruntwork-io/terragrunt-action@v3
-        with:
-          tg_command: run --all init --config root.hcl
-      - uses: gruntwork-io/terragrunt-action@v3
         name: Terragrunt run command
         with:
           tg_add_approve: 1

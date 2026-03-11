@@ -8,4 +8,4 @@ jobs:
       - uses: actions/checkout@v6
       - uses: gruntwork-io/terragrunt-action@v3
         with:
-          tg_command: run --all validate
+          tg_command: hcl validate
