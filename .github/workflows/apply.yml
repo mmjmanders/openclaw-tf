@@ -1,0 +1,23 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: gruntwork-io/terragrunt-action@v3
+        with:
+          tg_version: 0.99.4
+          tofu_version: 1.11.5
+          tg_add_approve: 1
+          tg_command: run --all apply
+          tg_dir: ./environments/dev
+        env:
+          BACKEND_ACCESS_KEY: ${{ secrets.BACKEND_ACCESS_KEY }}
+          BACKEND_SECRET_KEY: ${{ secrets.BACKEND_SECRET_KEY }}
+          TF_VAR_lightsail_public_key: ${{ secrets.LIGHTSAIL_PUBLIC_KEY }}
+          TF_VAR_lightsail_allowed_cidrs: ${{ secrets.LIGHTSAIL_ALLOWED_CIDRS }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: eu-central-1
