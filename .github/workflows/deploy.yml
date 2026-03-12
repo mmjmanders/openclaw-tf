@@ -1,8 +1,4 @@
 on:
-  push:
-    branches:
-      - main
-
   workflow_dispatch:
     inputs:
       environment:
@@ -13,16 +9,7 @@ on:
           - dev
 
 jobs:
-  deploy-dev:
-    if: github.event_name == 'push'
-    uses: ./.github/workflows/.terragrunt-template.yml
-    secrets: inherit
-    with:
-      environment: dev
-      command: apply
-
   deploy:
-    if: github.event_name == 'workflow_dispatch'
     uses: ./.github/workflows/.terragrunt-template.yml
     secrets: inherit
     with:
