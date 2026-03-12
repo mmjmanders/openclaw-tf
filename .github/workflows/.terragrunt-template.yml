@@ -11,6 +11,9 @@ on:
         type: string
         default: plan
 
+env:
+  TF_PLUGIN_CACHE_DIR: $GITHUB_WORKSPACE/.terraform.d/plugin-cache
+
 jobs:
   terragrunt:
     runs-on: ubuntu-latest
@@ -28,6 +31,10 @@ jobs:
       TF_VAR_lightsail_allowed_cidrs: ${{ secrets.LIGHTSAIL_ALLOWED_CIDRS }}
     steps:
       - uses: actions/checkout@v6
+      - uses: actions/cache@v5
+        with:
+          path: $TF_PLUGIN_CACHE_DIR
+          key: ${{ runner.os }}-terraform-${{ hashFiles('**/*.hcl', '**/*.tf') }}
       - uses: gruntwork-io/terragrunt-action@v3
         name: Terragrunt run command
         with:
