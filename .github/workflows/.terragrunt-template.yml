@@ -11,14 +11,12 @@ on:
         type: string
         default: plan
 
-env:
-  TF_PLUGIN_CACHE_DIR: $GITHUB_WORKSPACE/.terraform.d/plugin-cache
-
 jobs:
   terragrunt:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     env:
+      TF_PLUGIN_CACHE_DIR: $GITHUB_WORKSPACE/.terraform.d/plugin-cache
       BACKEND_ACCESS_KEY: ${{ secrets.BACKEND_ACCESS_KEY }}
       BACKEND_SECRET_KEY: ${{ secrets.BACKEND_SECRET_KEY }}
       BACKEND_BUCKET: ${{ secrets.BACKEND_BUCKET }}
@@ -33,7 +31,7 @@ jobs:
       - uses: actions/checkout@v6
       - uses: actions/cache@v5
         with:
-          path: $TF_PLUGIN_CACHE_DIR
+          path: $GITHUB_WORKSPACE/.terraform.d/plugin-cache
           key: ${{ runner.os }}-terraform-${{ hashFiles('**/*.hcl', '**/*.tf') }}
       - uses: gruntwork-io/terragrunt-action@v3
         name: Terragrunt run command
