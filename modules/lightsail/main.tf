@@ -5,6 +5,9 @@ variable "lightsail_public_key" {}
 variable "lightsail_allowed_cidrs" {
   type = set(string)
 }
+variable "lightsail_open_ports" {
+  type = set(string)
+}
 
 locals {
   name = join("-", ["lightsail", var.stage])
@@ -26,18 +29,14 @@ resource "aws_lightsail_instance" "openclaw" {
 resource "aws_lightsail_instance_public_ports" "instance_public_ports" {
   instance_name = aws_lightsail_instance.openclaw.name
 
-  port_info {
-    cidrs     = var.lightsail_allowed_cidrs
-    from_port = 22
-    protocol  = "tcp"
-    to_port   = 22
-  }
-
-  port_info {
-    cidrs     = var.lightsail_allowed_cidrs
-    from_port = 443
-    protocol  = "tcp"
-    to_port   = 443
+  dynamic "port_info" {
+    for_each = var.lightsail_open_ports
+    content {
+      cidrs     = var.lightsail_allowed_cidrs
+      from_port = port_info.key
+      protocol  = "tcp"
+      to_port   = port_info.key
+    }
   }
 }
 
