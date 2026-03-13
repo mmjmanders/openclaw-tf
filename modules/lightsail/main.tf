@@ -26,9 +26,8 @@ resource "aws_lightsail_instance" "openclaw" {
   bundle_id         = var.lightsail_bundle_id
   key_pair_name     = aws_lightsail_key_pair.key_pair.name
   user_data         = <<EOF
-#!/bin/bash
-
-curl -s https://d25b4yjpexuuj4.cloudfront.net/scripts/lightsail/setup-lightsail-openclaw-bedrock-role.sh | bash -s -- ${local.lightsail_instance_name} ${var.region}"
+echo "Enabling Amazon Bedrock..."
+curl -s https://d25b4yjpexuuj4.cloudfront.net/scripts/lightsail/setup-lightsail-openclaw-bedrock-role.sh | bash -s -- ${local.lightsail_instance_name} ${var.region}
 EOF
 }
 
