@@ -18,8 +18,6 @@ export const lightsailInstance = new aws.lightsail.Instance("Instance", {
   bundleId,
   availabilityZone: `${region}a`,
   keyPairName: lightsailKeyPair.name,
-  userData: `echo "Enabling Amazon Bedrock..."
-curl -s https://d25b4yjpexuuj4.cloudfront.net/scripts/lightsail/setup-lightsail-openclaw-bedrock-role.sh | bash -s -- ${name}-instance ${region}`,
 });
 
 new aws.lightsail.InstancePublicPorts("PublicPorts", {
