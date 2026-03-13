@@ -9,7 +9,7 @@ export default $config({
             home: "aws",
             providers: {
                 aws: {
-                    region: 'eu-central-1'
+                    region: process.env.AWS_DEFAULT_REGION || 'eu-central-1'
                 }
             }
         };
