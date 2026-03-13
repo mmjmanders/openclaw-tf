@@ -145,3 +145,6 @@ dist
 
 # Custom
 .idea/
+
+# sst
+.sst
