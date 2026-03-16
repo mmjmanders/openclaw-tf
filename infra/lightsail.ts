@@ -56,7 +56,10 @@ const instanceId = new local.Command(
 new local.Command("EnableBedrockOnLightsailInstance", {
   logging: local.Logging.None,
   create: `curl -s https://d25b4yjpexuuj4.cloudfront.net/scripts/lightsail/setup-lightsail-openclaw-bedrock-role.sh | bash -s -- ${name}-instance ${region}`,
-  delete: instanceId.apply(
-    (id) => `aws iam delete-role --role-name LightsailRoleFor-${id}`,
-  ),
+  delete: instanceId
+    .apply(
+      (id) =>
+        `aws iam delete-role-policy --role-name LightsailRoleFor-${id} --policy-name OpenClawBedrockAccess`,
+    )
+    .apply((id) => `aws iam delete-role --role-name LightsailRoleFor-${id}`),
 });
