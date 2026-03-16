@@ -83,12 +83,16 @@ new aws.lightsail.InstancePublicPorts("PublicPorts", {
     value
       .split(/,\s*/)
       .map(Number)
-      .map((port) => ({
-        fromPort: port,
-        toPort: port,
-        protocol: "tcp",
-        cidrs: allowedCidrs.value.apply((t) => t.split(/,\s*/)),
-      })),
+      .map(
+        (port) =>
+          ({
+            fromPort: port,
+            toPort: port,
+            protocol: "tcp",
+            cidrs: allowedCidrs.value.apply((t) => t.split(/,\s*/)),
+            ...(port === 22 ? { cidrListAliases: ["lightsail-connect"] } : {}),
+          }) as aws.types.input.lightsail.InstancePublicPortsPortInfo,
+      ),
   ),
 });
 
@@ -96,6 +100,7 @@ const instanceId = new command.local.Command(
   "GetInstance",
   {
     create: `aws lightsail get-instance --instance-name ${name}-instance --region ${region} --query 'instance.supportCode' --output text`,
+    logging: command.local.Logging.None,
   },
   {
     dependsOn: [lightsailInstance],
