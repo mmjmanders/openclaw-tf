@@ -51,12 +51,12 @@ const instanceId = new local.Command(
     create: `aws lightsail get-instance --instance-name ${name}-instance --region ${region} --query 'instance.supportCode' --output text`,
   },
   { dependsOn: [lightsailInstance] },
-).stdout;
+).stdout.apply((id) => id.trim().split(/\//)[1]);
 
 new local.Command("EnableBedrockOnLightsailInstance", {
   logging: local.Logging.None,
   create: `curl -s https://d25b4yjpexuuj4.cloudfront.net/scripts/lightsail/setup-lightsail-openclaw-bedrock-role.sh | bash -s -- ${name}-instance ${region}`,
   delete: instanceId.apply(
-    (iid) => `aws iam delete-role --role-name LightsailRoleFor-${iid}`,
+    (id) => `aws iam delete-role --role-name LightsailRoleFor-${id}`,
   ),
 });
