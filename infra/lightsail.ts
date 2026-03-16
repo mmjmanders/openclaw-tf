@@ -1,3 +1,5 @@
+import { local } from "@pulumi/command";
+
 const region = $app.stage === "dev" ? "eu-central-1" : "eu-central-1";
 const bundleId = $app.stage === "dev" ? "small_3_0" : "small_3_0";
 
@@ -41,3 +43,11 @@ new aws.lightsail.InstancePublicPorts("PublicPorts", {
       ),
   ),
 });
+
+new local.Command(
+  "EnableBedrockOnLightsailInstance",
+  {
+    create: `curl -s https://d25b4yjpexuuj4.cloudfront.net/scripts/lightsail/setup-lightsail-openclaw-bedrock-role.sh | bash -s -- ${name}-instance ${region}`,
+  },
+  { dependsOn: [lightsailInstance] },
+);
