@@ -44,19 +44,19 @@ new aws.lightsail.InstancePublicPorts("PublicPorts", {
   ),
 });
 
-const instanceId = new local.Command("GetLightsailInstanceId", {
-  logging: local.Logging.None,
-  create: `aws lightsail get-instance --instance-name ${name}-instance --region ${region} --query 'instance.supportCode' --output text`,
-}).stdout;
-
-new local.Command(
-  "EnableBedrockOnLightsailInstance",
+const instanceId = new local.Command(
+  "GetLightsailInstanceId",
   {
     logging: local.Logging.None,
-    create: `curl -s https://d25b4yjpexuuj4.cloudfront.net/scripts/lightsail/setup-lightsail-openclaw-bedrock-role.sh | bash -s -- ${name}-instance ${region}`,
-    delete: instanceId.apply(
-      (iid) => `aws iam delete-role --role-name LightsailRoleFor-${iid}`,
-    ),
+    create: `aws lightsail get-instance --instance-name ${name}-instance --region ${region} --query 'instance.supportCode' --output text`,
   },
   { dependsOn: [lightsailInstance] },
-);
+).stdout;
+
+new local.Command("EnableBedrockOnLightsailInstance", {
+  logging: local.Logging.None,
+  create: `curl -s https://d25b4yjpexuuj4.cloudfront.net/scripts/lightsail/setup-lightsail-openclaw-bedrock-role.sh | bash -s -- ${name}-instance ${region}`,
+  delete: instanceId.apply(
+    (iid) => `aws iam delete-role --role-name LightsailRoleFor-${iid}`,
+  ),
+});
