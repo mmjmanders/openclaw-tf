@@ -1,5 +1,4 @@
 /// <reference path="./.sst/platform/config.d.ts" />
-
 export default $config({
   app(input) {
     return {
@@ -10,7 +9,9 @@ export default $config({
       providers: {
         aws: {
           region: process.env.AWS_DEFAULT_REGION || "eu-central-1",
+          version: "7.22.0",
         },
+        command: "1.2.1",
       },
     };
   },
