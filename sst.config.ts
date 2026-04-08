@@ -9,7 +9,7 @@ export default $config({
       providers: {
         aws: {
           region: process.env.AWS_DEFAULT_REGION || "eu-central-1",
-          version: "7.22.0",
+          version: "7.24.0",
         },
         command: "1.2.1",
       },
